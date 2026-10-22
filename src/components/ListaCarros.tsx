@@ -74,7 +74,7 @@ export function ListaCarros({encabezado}: {encabezado?: ReactElement}){
                   <Text style={globalStyles.badgeText}>{item.anio ?? '—'}</Text>
                 </View>
                 <View style={globalStyles.badgeSoft}>
-                  <Text style={globalStyles.badgeSoftText}>{item.combustible != null ? `${item.combustible} gal` : '—'}</Text>
+                  <Text style={globalStyles.badgeSoftText}>{item.combustible != null ? `${item.combustible} gal` : 'Sin combustible'}</Text>
                 </View>
               </View>
               <Text style={[globalStyles.cardTitle, s.titulo]}>{item.marca} {item.modelo}</Text>

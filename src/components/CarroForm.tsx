@@ -88,9 +88,13 @@ export function CarroForm({carro, textoBoton, enviando, onGuardar, variante = 'p
         >
           {field => {
             const meta = field.state.meta
-            const error = (meta.isTouched || meta.isBlurred) && meta.errors.length > 0
-              ? meta.errors.join(', ')
-              : undefined
+            const tocado = meta.isTouched || meta.isBlurred
+            //Al crear, el error aparece cuando el usuario toca el campo.
+            //Al editar, se muestra desde el inicio: asi se ve que dato de la API
+            //esta incompleto y por que el boton de actualizar sigue deshabilitado
+            const error = tocado
+              ? meta.errors.join(', ') || undefined
+              : carro ? c.validar(field.state.value) : undefined
             return (
               <View style={s.campo}>
                 <Text style={s.label}>{c.label}</Text>

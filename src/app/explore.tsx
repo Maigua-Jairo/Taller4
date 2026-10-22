@@ -31,15 +31,15 @@ export default function Explore() {
             <View style={styles.info}>
               <View style={[globalStyles.badgeRow, styles.badges]}>
                 <View style={globalStyles.badgeTop}>
-                  <Text style={globalStyles.badgeText}>{item.anio}</Text>
+                  <Text style={globalStyles.badgeText}>{item.anio ?? '—'}</Text>
                 </View>
                 <View style={globalStyles.badgeSoft}>
-                  <Text style={globalStyles.badgeSoftText}>{item.combustible} gal</Text>
+                  <Text style={globalStyles.badgeSoftText}>{item.combustible != null ? `${item.combustible} gal` : 'Sin combustible'}</Text>
                 </View>
               </View>
               <Text style={styles.title}>{item.marca} - {item.modelo}</Text>
               <Text style={styles.subtext}>Color: {item.color}</Text>
-              <Text style={styles.price}>${item.precio}</Text>
+              <Text style={styles.price}>{item.precio != null ? `$${item.precio.toLocaleString()}` : '—'}</Text>
             </View>
 
             {/* Botón de Eliminar que ejecuta la actualización optimista */}
