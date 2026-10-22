@@ -1,11 +1,11 @@
-import { ReactElement, useEffect, useState } from 'react'
-import { View, Text, FlatList, Pressable, Modal, Alert, Platform, ActivityIndicator, StyleSheet } from 'react-native'
-import { Carro } from '@/types/carro'
+import { colors, globalStyles } from '@/constants/patiotuerca'
 import { useCarros } from '@/hooks/useCarros'
 import { useEditarCarro } from '@/hooks/useEditarCarro'
 import { useEliminarCarro } from '@/hooks/useEliminarCarro'
+import { Carro } from '@/types/carro'
+import { ReactElement, useEffect, useState } from 'react'
+import { ActivityIndicator, Alert, FlatList, Modal, Platform, Pressable, StyleSheet, Text, View } from 'react-native'
 import { CarroForm } from './CarroForm'
-import { colors, globalStyles } from '@/constants/patiotuerca'
 
 //Lista de carros con acciones de editar y eliminar
 //Se usa en Home y en Explore: ambas comparten la query 'carros', asi que cualquier

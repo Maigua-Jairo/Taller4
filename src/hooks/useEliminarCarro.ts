@@ -1,14 +1,14 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { carrosService } from '@/api/carros.service'
 import { Carro } from '@/types/carro'
-import { KEY } from './useCarros'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { KEY } from './useEditarCarro'
 
 //Hook para eliminar un carro con DELETE usando actualizacion optimista:
 //la UI se actualiza antes de que responda el servidor, y si falla se revierte
 export function useEliminarCarro(){
     const qc = useQueryClient()
     return useMutation({
-        mutationFn: (id: string) => carrosService.remove(id),
+        mutationFn: (id: string) => carrosService.delete(id),
 
         //onMutate: se ejecuta ANTES de la peticion
         onMutate: async (id) => {
