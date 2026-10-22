@@ -5,6 +5,7 @@ import { useCarros } from '@/hooks/useCarros'
 import { useEditarCarro } from '@/hooks/useEditarCarro'
 import { useEliminarCarro } from '@/hooks/useEliminarCarro'
 import { CarroForm } from './CarroForm'
+import { colors, globalStyles } from '@/constants/patiotuerca'
 
 //Lista de carros con acciones de editar y eliminar
 //Se usa en Home y en Explore: ambas comparten la query 'carros', asi que cualquier
@@ -58,30 +59,36 @@ export function ListaCarros({encabezado}: {encabezado?: ReactElement}){
         ListHeaderComponent={
           <>
             {encabezado}
-            {eliminar.isError && <Text style={[s.mensaje, s.mensajeError]}>No se pudo eliminar: {eliminar.error.message}</Text>}
-            {eliminar.isSuccess && <Text style={[s.mensaje, s.mensajeExito]}>Carro eliminado correctamente</Text>}
-            {editar.isSuccess && <Text style={[s.mensaje, s.mensajeExito]}>Carro actualizado correctamente</Text>}
+            {eliminar.isError && <Text style={globalStyles.messageError}>No se pudo eliminar: {eliminar.error.message}</Text>}
+            {eliminar.isSuccess && <Text style={globalStyles.messageSuccess}>Carro eliminado correctamente</Text>}
+            {editar.isSuccess && <Text style={globalStyles.messageSuccess}>Carro actualizado correctamente</Text>}
           </>
         }
         ListEmptyComponent={<Text style={s.centro}>No hay carros registrados</Text>}
         renderItem={({item}) => {
           const borrando = eliminar.isPending && eliminar.variables === item.id
           return (
-            <View style={s.tarjeta}>
-              <Text style={s.titulo}>{item.marca} {item.modelo}</Text>
-              <Text>Año: {item.anio ?? '—'} · Color: {item.color ?? '—'}</Text>
-              <Text>Combustible: {item.combustible != null ? `${item.combustible} gal` : '—'}</Text>
-              <Text style={s.precio}>{item.precio != null ? `$${Number(item.precio).toLocaleString()}` : '—'}</Text>
+            <View style={globalStyles.card}>
+              <View style={globalStyles.badgeTop}>
+                <Text style={globalStyles.badgeText}>{item.anio ?? '—'}</Text>
+              </View>
+              <Text style={[globalStyles.cardTitle, s.titulo]}>{item.marca} {item.modelo}</Text>
+              <Text style={globalStyles.cardSubtitle}>
+                Color {item.color ?? '—'} · Combustible {item.combustible != null ? `${item.combustible} gal` : '—'}
+              </Text>
+              <Text style={globalStyles.cardPrice}>{item.precio != null ? `$${Number(item.precio).toLocaleString()}` : '—'}</Text>
               <View style={s.acciones}>
-                <Pressable style={[s.boton, s.botonEditar]} onPress={() => abrirEdicion(item)}>
-                  <Text style={s.botonTexto}>Editar</Text>
+                <Pressable style={[globalStyles.buttonPrimary, s.boton]} onPress={() => abrirEdicion(item)}>
+                  <Text style={globalStyles.buttonText}>Editar</Text>
                 </Pressable>
                 <Pressable
-                  style={[s.boton, s.botonEliminar, borrando && s.deshabilitado]}
+                  style={[globalStyles.buttonDanger, s.boton, borrando && globalStyles.buttonDisabled]}
                   disabled={borrando}
                   onPress={() => confirmarEliminar(item)}
                 >
-                  {borrando ? <ActivityIndicator color="#fff" /> : <Text style={s.botonTexto}>Eliminar</Text>}
+                  {borrando
+                    ? <ActivityIndicator color={colors.status.error} />
+                    : <Text style={globalStyles.buttonDangerText}>Eliminar</Text>}
                 </Pressable>
               </View>
             </View>
@@ -92,8 +99,8 @@ export function ListaCarros({encabezado}: {encabezado?: ReactElement}){
       {/* Formulario de edicion con los datos actuales precargados */}
       <Modal visible={editando !== null} animationType="slide" onRequestClose={() => setEditando(null)}>
         <View style={s.modal}>
-          <Text style={s.titulo}>Editar carro</Text>
-          {editar.isError && <Text style={[s.mensaje, s.mensajeError]}>No se pudo actualizar: {editar.error.message}</Text>}
+          <Text style={globalStyles.sectionTitle}>Editar carro</Text>
+          {editar.isError && <Text style={[globalStyles.messageError, s.mensajeModal]}>No se pudo actualizar: {editar.error.message}</Text>}
           {editando && (
             <CarroForm
               key={editando.id}
@@ -104,7 +111,7 @@ export function ListaCarros({encabezado}: {encabezado?: ReactElement}){
             />
           )}
           <Pressable style={s.cancelar} onPress={() => setEditando(null)} disabled={editar.isPending}>
-            <Text>Cancelar</Text>
+            <Text style={s.cancelarTexto}>Cancelar</Text>
           </Pressable>
         </View>
       </Modal>
@@ -113,20 +120,13 @@ export function ListaCarros({encabezado}: {encabezado?: ReactElement}){
 }
 
 const s = StyleSheet.create({
-  centro: {textAlign: 'center', marginTop: 20},
-  lista: {padding: 16, gap: 12},
-  tarjeta: {borderWidth: 1, borderColor: '#ddd', borderRadius: 8, padding: 12, gap: 4},
-  titulo: {fontSize: 18, fontWeight: '700'},
-  precio: {fontSize: 16, fontWeight: '700'},
-  acciones: {flexDirection: 'row', gap: 8, marginTop: 8},
-  boton: {flex: 1, padding: 10, borderRadius: 6, alignItems: 'center'},
-  botonEditar: {backgroundColor: '#1565c0'},
-  botonEliminar: {backgroundColor: '#d32f2f'},
-  botonTexto: {color: '#fff', fontWeight: '600'},
-  deshabilitado: {opacity: 0.5},
-  mensaje: {padding: 10, borderRadius: 6, marginBottom: 8},
-  mensajeExito: {backgroundColor: '#e8f5e9', color: '#2e7d32'},
-  mensajeError: {backgroundColor: '#ffebee', color: '#c62828'},
-  modal: {flex: 1, padding: 16, paddingTop: 60, gap: 12},
+  centro: {textAlign: 'center', marginTop: 20, color: colors.neutral.textSecondary},
+  lista: {paddingVertical: 8},
+  titulo: {marginTop: 8},
+  acciones: {flexDirection: 'row', gap: 8, marginTop: 12},
+  boton: {flex: 1, paddingHorizontal: 12},
+  modal: {flex: 1, padding: 16, paddingTop: 60, gap: 12, backgroundColor: colors.neutral.background},
+  mensajeModal: {marginHorizontal: 0},
   cancelar: {alignItems: 'center', padding: 12},
+  cancelarTexto: {color: colors.primary.light, fontSize: 16, fontWeight: '600'},
 })

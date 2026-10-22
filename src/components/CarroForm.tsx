@@ -1,6 +1,7 @@
 import { useForm } from '@tanstack/react-form'
 import { View, Text, TextInput, Pressable, ActivityIndicator, StyleSheet } from 'react-native'
 import { Carro, NuevoCarro } from '@/types/carro'
+import { colors, globalStyles } from '@/constants/patiotuerca'
 
 //En el formulario todos los valores son string (asi los maneja TextInput)
 //y se convierten a number recien al guardar
@@ -43,9 +44,10 @@ interface Props {
   textoBoton: string
   enviando: boolean                               //isPending de la mutacion
   onGuardar: (carro: NuevoCarro) => Promise<unknown>
+  variante?: 'primary' | 'secondary'              //azul (accion primaria) o naranja ("Vender")
 }
 
-export function CarroForm({carro, textoBoton, enviando, onGuardar}: Props){
+export function CarroForm({carro, textoBoton, enviando, onGuardar, variante = 'primary'}: Props){
   const form = useForm({
     defaultValues: {
       marca: carro?.marca ?? '',
@@ -98,6 +100,7 @@ export function CarroForm({carro, textoBoton, enviando, onGuardar}: Props){
                   onBlur={field.handleBlur}
                   keyboardType={c.numerico ? 'numeric' : 'default'}
                   placeholder={c.label}
+                  placeholderTextColor={colors.neutral.textSecondary}
                   style={[s.input, error ? s.inputError : null]}
                 />
                 {error && <Text style={s.error}>{error}</Text>}
@@ -116,11 +119,15 @@ export function CarroForm({carro, textoBoton, enviando, onGuardar}: Props){
             <Pressable
               onPress={() => form.handleSubmit()}
               disabled={deshabilitado}
-              style={[s.boton, deshabilitado && s.botonDeshabilitado]}
+              style={[
+                variante === 'secondary' ? globalStyles.buttonSecondary : globalStyles.buttonPrimary,
+                s.boton,
+                deshabilitado && globalStyles.buttonDisabled,
+              ]}
             >
               {cargando
-                ? <ActivityIndicator color="#fff" />
-                : <Text style={s.botonTexto}>{textoBoton}</Text>}
+                ? <ActivityIndicator color={colors.neutral.white} />
+                : <Text style={globalStyles.buttonText}>{textoBoton}</Text>}
             </Pressable>
           )
         }}
@@ -130,13 +137,20 @@ export function CarroForm({carro, textoBoton, enviando, onGuardar}: Props){
 }
 
 const s = StyleSheet.create({
-  contenedor: {gap: 10},
+  contenedor: {gap: 12},
   campo: {gap: 4},
-  label: {fontWeight: '600'},
-  input: {borderWidth: 1, borderColor: '#ccc', borderRadius: 6, padding: 10},
-  inputError: {borderColor: '#d32f2f'},
-  error: {color: '#d32f2f', fontSize: 12},
-  boton: {backgroundColor: '#1565c0', padding: 12, borderRadius: 6, alignItems: 'center'},
-  botonDeshabilitado: {opacity: 0.5},
-  botonTexto: {color: '#fff', fontWeight: '700'},
+  label: {fontSize: 14, fontWeight: '600', color: colors.neutral.textPrimary},
+  input: {
+    backgroundColor: colors.neutral.white,
+    borderWidth: 1,
+    borderColor: colors.neutral.surface,
+    borderRadius: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    fontSize: 15,
+    color: colors.neutral.textPrimary,
+  },
+  inputError: {borderColor: colors.status.error},
+  error: {color: colors.status.error, fontSize: 12},
+  boton: {marginTop: 4},
 })
