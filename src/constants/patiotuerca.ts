@@ -80,6 +80,24 @@ export const globalStyles = StyleSheet.create({
     fontWeight: 'bold',
     textTransform: 'uppercase',
   },
+  //Badge suave: fondo naranja claro de la guia (secondary.light)
+  badgeSoft: {
+    backgroundColor: colors.secondary.light,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 4,
+    alignSelf: 'flex-start',
+  },
+  badgeSoftText: {
+    color: colors.secondary.main,
+    fontSize: 11,
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+  },
+  badgeRow: {
+    flexDirection: 'row',
+    gap: 6,
+  },
 
   // --- BOTONES ---
   buttonPrimary: {

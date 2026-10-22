@@ -29,9 +29,16 @@ export default function Explore() {
         renderItem={({ item }) => (
           <View style={styles.card}>
             <View style={styles.info}>
+              <View style={[globalStyles.badgeRow, styles.badges]}>
+                <View style={globalStyles.badgeTop}>
+                  <Text style={globalStyles.badgeText}>{item.anio}</Text>
+                </View>
+                <View style={globalStyles.badgeSoft}>
+                  <Text style={globalStyles.badgeSoftText}>{item.combustible} gal</Text>
+                </View>
+              </View>
               <Text style={styles.title}>{item.marca} - {item.modelo}</Text>
-              <Text style={styles.subtext}>Año: {item.anio} | Color: {item.color}</Text>
-              <Text style={styles.subtext}>Combustible: {item.combustible} gal</Text>
+              <Text style={styles.subtext}>Color: {item.color}</Text>
               <Text style={styles.price}>${item.precio}</Text>
             </View>
 
@@ -59,6 +66,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   info: { flex: 1, marginRight: 12 },
+  badges: { marginBottom: 8 },
   title: globalStyles.cardTitle,
   subtext: { ...globalStyles.cardSubtitle, marginBottom: 2 },
   price: { ...globalStyles.cardPrice, marginTop: 4 },

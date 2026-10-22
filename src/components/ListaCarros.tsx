@@ -69,13 +69,16 @@ export function ListaCarros({encabezado}: {encabezado?: ReactElement}){
           const borrando = eliminar.isPending && eliminar.variables === item.id
           return (
             <View style={globalStyles.card}>
-              <View style={globalStyles.badgeTop}>
-                <Text style={globalStyles.badgeText}>{item.anio ?? '—'}</Text>
+              <View style={globalStyles.badgeRow}>
+                <View style={globalStyles.badgeTop}>
+                  <Text style={globalStyles.badgeText}>{item.anio ?? '—'}</Text>
+                </View>
+                <View style={globalStyles.badgeSoft}>
+                  <Text style={globalStyles.badgeSoftText}>{item.combustible != null ? `${item.combustible} gal` : '—'}</Text>
+                </View>
               </View>
               <Text style={[globalStyles.cardTitle, s.titulo]}>{item.marca} {item.modelo}</Text>
-              <Text style={globalStyles.cardSubtitle}>
-                Color {item.color ?? '—'} · Combustible {item.combustible != null ? `${item.combustible} gal` : '—'}
-              </Text>
+              <Text style={globalStyles.cardSubtitle}>Color {item.color ?? '—'}</Text>
               <Text style={globalStyles.cardPrice}>{item.precio != null ? `$${Number(item.precio).toLocaleString()}` : '—'}</Text>
               <View style={s.acciones}>
                 <Pressable style={[globalStyles.buttonPrimary, s.boton]} onPress={() => abrirEdicion(item)}>
